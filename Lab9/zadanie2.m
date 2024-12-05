@@ -1,3 +1,4 @@
+% equnonlin_solve.m
 clear all; close all;
 
 it = 12;
@@ -6,46 +7,57 @@ f  = @(x) sin(x);         % definicja funkcji
 fp = @(x) cos(x);         % definicja pochodnej funkcji
 tol=0.001*pi;
 z=pi;
-
-% Tworzenie okna z wieloma wykresami
-figure;
-
 disp("sinus");
-cb = nonlinsolvers( f, fp, a, b, 'bisection', it, tol, z);
-cr = nonlinsolvers( f, fp, a, b, 'regula-falsi', it, tol, z);
-cn = nonlinsolvers( f, fp, a, b, 'newton-raphson', it, tol, z);
+cb = nonlinsolvers( f, fp, a, b, 'bisection', it,tol,z,b);
+cr = nonlinsolvers( f, fp, a, b, 'regula-falsi', it,tol,z,b);
+cn = nonlinsolvers( f, fp, a, b, 'newton-raphson', it,tol,z,b);
+figure; plot( 1:it,cb,'o-', 1:it,cr,'*', 1:it,cn,'^-'); xlabel('iter'); title('c(iter)')
+grid on, legend('Bisection','Regula-Falsi','Newton-Raphson');
 
-subplot(2, 2, 1); % Tworzymy 2x2 siatkę, pierwszy wykres
-plot(1:it, cb, 'o-', 1:it, cr, '*', 1:it, cn, '^-');
-xlabel('iter'); title('c(iter) dla sin(x)'); 
-grid on; legend('Bisection', 'Regula-Falsi', 'Newton-Raphson');
-
-% Definicje dla funkcji kwadratowych
 a = 0.5; % współczynnik kwadratowy
 c = 0; % współczynnik wolny
-z = 0;
-it = 16;
-a0 = -1;
-b0 = 2;
-tol1 = 0.001;
+z=0;
+it=16;
+a0=-1;
+b0=2;
+tol1=0.001;
+b=5.67; % różne wartości b
+f=@(x) a*x.^2+b*x+c;
+fp=@(x) 2*a*x +b;
 
-% Różne wartości b
-b_values = [5.67, 1, 0.087];
 
-for idx = 1:length(b_values)
-    b = b_values(idx);
-    f = @(x) a*x.^2 + b*x + c;
-    fp = @(x) 2*a*x + b;
+disp("kwadratowa, b=5.67");
+cb = nonlinsolvers(f, fp, a0, b0, 'bisection', it,tol1,z,b);
+cr = nonlinsolvers(f, fp, a0, b0, 'regula-falsi', it,tol1,z,b);
+cn = nonlinsolvers(f, fp, a0, b0, 'newton-raphson', it,tol1,z,b);
 
-    disp(['kwadratowa, b=', num2str(b)]);
-    cb = nonlinsolvers(f, fp, a0, b0, 'bisection', it, tol1, z);
-    cr = nonlinsolvers(f, fp, a0, b0, 'regula-falsi', it, tol1, z);
-    cn = nonlinsolvers(f, fp, a0, b0, 'newton-raphson', it, tol1, z);
+figure; plot( 1:it,cb,'o-', 1:it,cr,'*', 1:it,cn,'^-'); xlabel('iter'); title('c(iter), b=5.67')
+grid on, legend('Bisection','Regula-Falsi','Newton-Raphson');
 
-    subplot(2, 2, idx + 1); % Kolejne wykresy w siatce 2x2
-    plot(1:it, cb, 'o-', 1:it, cr, '*', 1:it, cn, '^-');
-    xlabel('iter'); 
-    title(['c(iter), b=', num2str(b)]);
-    grid on; 
-    legend('Bisection', 'Regula-Falsi', 'Newton-Raphson');
-end
+b=1; % różne wartości b
+f=@(x) a*x.^2+b*x+c;
+fp=@(x) 2*a*x +b;
+
+
+disp("kwadratowa, b=1");
+cb = nonlinsolvers(f, fp, a0, b0, 'bisection', it,tol1,z,b);
+cr = nonlinsolvers(f, fp, a0, b0, 'regula-falsi', it,tol1,z,b);
+cn = nonlinsolvers(f, fp, a0, b0, 'newton-raphson', it,tol1,z,b);
+
+figure; plot( 1:it,cb,'o-', 1:it,cr,'*', 1:it,cn,'^-'); xlabel('iter'); title('c(iter), b=1')
+grid on, legend('Bisection','Regula-Falsi','Newton-Raphson');
+
+b=0.087; % różne wartości b
+
+c=-1;
+f=@(x) a*x.^2+b*x+c;
+fp=@(x) 2*a*x +b;
+
+
+disp("kwadratowa, b=0.087");
+cb = nonlinsolvers(f, fp, a0, b0, 'bisection', it,tol1,z,b);
+cr = nonlinsolvers(f, fp, a0, b0, 'regula-falsi', it,tol1,z,b);
+cn = nonlinsolvers(f, fp, a0, b0, 'newton-raphson', it,tol1,z,b);
+
+figure; plot( 1:it,cb,'o-', 1:it,cr,'*', 1:it,cn,'^-'); xlabel('iter'); title('c(iter), b=0.087')
+grid on, legend('Bisection','Regula-Falsi','Newton-Raphson');
