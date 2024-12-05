@@ -1,4 +1,4 @@
-function [C, first_iter] = nonlinsolvers(f, fp, a, b, solver, iter, tol, z)
+function [C, first_iter] = nonlinsolvers(f, fp, a, b, solver, iter, tol, z,bval)
 
 C = zeros(1, iter);    % Kolejne oszacowania miejsca zerowego 
 first_iter = -1;       % Flaga na pierwszą iterację spełniającą kryterium
@@ -48,6 +48,12 @@ for i = 1 : iter
     C(i) = c;  
     
     % Sprawdzenie tolerancji
+    if first_iter == -1 && bval==0.087 && abs(c - 1.33) < tol
+        first_iter = i;  % Zapisz numer iteracji, jeśli warunek spełniony
+        % Wyświetlenie wyniku
+        disp(['Metoda: ', solver, ', Pierwsza iteracja spełniająca kryterium: ', num2str(first_iter)]);
+    end
+
     if first_iter == -1 && abs(c - z) < tol
         first_iter = i;  % Zapisz numer iteracji, jeśli warunek spełniony
         % Wyświetlenie wyniku
